@@ -1,6 +1,7 @@
 import express from "express";
 import cors from "cors";
 import connectMongoDB from "./config/mongoDB.config.js";
+import WorkspaceRepository from "./repositories/Workspace.repository.js";
 
 /* Conectar a MongoDB */
 connectMongoDB();
@@ -27,4 +28,21 @@ app.get("/status", (request, response) => {
 /* Levantar el servidor en el puerto 8080 */
 app.listen(8080, () => {
   console.log("Servidor corriendo en http://localhost:8080");
+});
+
+app.post("/test/crear-workspace", async (request, response) => {
+  try {
+    const { name, url_image } = request.body;
+
+    await WorkspaceRepository.create(name, url_image);
+    response.json({
+      ok: true,
+      message: "Workspace creado exitosamente!",
+    });
+  } catch (error) {
+    response.json({
+      ok: false,
+      message: error.message,
+    });
+  }
 });
