@@ -24,7 +24,7 @@ class WorkspaceRepository {
 
   /* Eliminar por ID */
   static async deleteById(workspace_id) {
-    await Workspaces.deleteById(workspace_id);
+    await Workspaces.findByIdAndDelete(workspace_id);
     return true;
   }
 
