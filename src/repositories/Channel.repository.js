@@ -2,10 +2,10 @@ import Channels from "../models/Channel.model.js";
 
 class ChannelRepository {
   /* Crear un canal */
-  static async create(name, private, workspace_id) {
+  static async create(name, is_private, workspace_id) {
     const new_channel = new Channels({
       name,
-      private,
+      private: is_private,
       workspace: workspace_id,
     });
     await new_channel.save();
