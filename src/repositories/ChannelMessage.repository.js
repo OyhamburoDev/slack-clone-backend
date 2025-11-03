@@ -1,4 +1,4 @@
-import ChannelMessages from "../models/ChannelMessage.model";
+import ChannelMessages from "../models/ChannelMessage.model.js";
 
 class ChannelMessageRepository {
   /* Crear un mensaje */
@@ -13,9 +13,14 @@ class ChannelMessageRepository {
   }
 
   /* Obtener todos los mensajes de un canal */
-  static async getAllByChannel(channel_id) {
+  static async getAllByChannelId(channel_id) {
     const messages = await ChannelMessages.find({ channel: channel_id })
-      .populate("member")
+      .populate({
+        path: "member",
+        populate: {
+          path: "user",
+        },
+      })
       .sort({ created_at: 1 });
     return messages;
   }
