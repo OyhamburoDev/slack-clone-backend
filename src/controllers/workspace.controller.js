@@ -1,12 +1,24 @@
 import WorkspaceRepository from "../repositories/Workspace.repository.js";
+import MemberWorkspaceRepository from "../repositories/MemberWorkspace.repository.js";
+import { ServerError } from "../utils/customError.utils.js";
+import ENVIRONMENT from "../config/environment.config.js";
+import UserRepository from "../repositories/User.repository.js";
+import transporter from "../config/nodemailer.config.js";
+import jwt from "jsonwebtoken";
 
 class WorkspaceController {
   /* Crear un espacio de trabajo; */
   static async create(request, response) {
     try {
       const { name, url_image } = request.body;
+      const user_id = request.user.id;
 
-      await WorkspaceRepository.create(name, url_image);
+      const workspace_id = await WorkspaceRepository.create(name, url_image);
+      await MemberWorkspaceRepository.create(user_id, workspace_id, "admin");
+      console.log("=== MIEMBRO CREADO ===");
+      console.log("user_id:", user_id);
+      console.log("workspace_id:", workspace_id);
+
       response.json({
         ok: true,
         message: "Workspace creado exitosamente!",
@@ -22,7 +34,9 @@ class WorkspaceController {
   /* Traer todos los workpsace */
   static async getAll(request, response) {
     try {
-      const workspaces = await WorkspaceRepository.getAll();
+      const user_id = request.user.id;
+      const workspaces =
+        await MemberWorkspaceRepository.getAllWorkspacesByUserId(user_id);
 
       response.json({
         ok: true,
@@ -121,6 +135,71 @@ class WorkspaceController {
         data: {
           workspace: new_workspace,
         },
+      });
+    } catch (error) {
+      response.json({
+        ok: false,
+        message: error.message,
+      });
+    }
+  }
+
+  static async inviteMember(request, response) {
+    try {
+      const { workspace_id } = request.params;
+      const { invited_email } = request.body;
+      const user_id = request.user.id;
+
+      // Verificar que el workspace existe
+      const workspace = await WorkspaceRepository.getById(workspace_id);
+      if (!workspace) {
+        throw new ServerError(404, "Workspace no encontrado");
+      }
+
+      //Buscar al usuario invitado
+      const user_invited = await UserRepository.getByEmail(invited_email);
+      if (!user_invited) {
+        throw new ServerError(404, "Usuario no encontrado");
+      }
+
+      //Verificar que No es miembro ya
+      const member_data =
+        await MemberWorkspaceRepository.getMemberWorkspaceByUserIdAndWorkspaceId(
+          user_invited._id,
+          workspace_id
+        );
+      if (member_data) {
+        throw new ServerError(409, "Usuario ya es miembro del workspace");
+      }
+
+      // Crear token de invitacion
+      const invite_token = jwt.sign(
+        {
+          id_invited: user_invited._id,
+          email_invited: invited_email,
+          id_workspace: workspace_id,
+          id_inviter: user_id,
+        },
+        ENVIRONMENT.JWT_SECRET,
+        { expiresIn: "7d" }
+      );
+
+      await transporter.sendMail({
+        from: ENVIRONMENT.GMAIL_USERNAME,
+        to: invited_email,
+        subject: "Invitación al workspace",
+        html: `
+    <h1>Has sido invitado al workspace ${workspace.name}</h1>
+    <p>Haz click en el siguiente enlace para aceptar la invitación:</p>
+    <a href="${ENVIRONMENT.URL_API_BACKEND}/api/members/confirm-invitation/${invite_token}">
+      Aceptar invitación
+    </a>
+  `,
+      });
+
+      response.json({
+        ok: true,
+        message: "Usuario invitado exitosamente",
       });
     } catch (error) {
       response.json({

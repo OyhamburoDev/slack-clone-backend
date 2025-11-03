@@ -3,11 +3,14 @@ import Workspaces from "../models/Workspace.model.js";
 class WorkspaceRepository {
   /* Crear un Workspace */
   static async create(name, url_image) {
-    await Workspaces.insertOne({
+    const result = await Workspaces.insertOne({
       name: name,
       url_image: url_image,
     });
-    return true;
+    console.log("=== RESULT DE WORKSPACE ===");
+    console.log(result);
+    console.log("insertedId:", result.insertedId);
+    return result._id;
   }
 
   /* Traer todos los Workpasces */

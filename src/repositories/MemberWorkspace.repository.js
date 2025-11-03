@@ -23,6 +23,14 @@ class MemberWorkspaceRepository {
     return member_workspace;
   }
 
+  /* Traer todos los miembros de un workspace */
+  static async getAllMembersByWorkspaceId(workspace_id) {
+    const members = await MemberWorkspaces.find({
+      workspace: workspace_id,
+    }).populate("user");
+    return members;
+  }
+
   /* Crear relacion usuario workspace */
   static async create(user_id, workspace_id, role = "member") {
     const member =

@@ -5,6 +5,8 @@ import auth_router from "./routes/auth.route.js";
 import workspace_router from "./routes/workspace.route.js";
 import channel_router from "./routes/channel.route.js";
 import authMiddleware from "./middlewares/auth.middleware.js";
+import member_router from "./routes/member.route.js";
+import channelMessage_router from "./routes/messageChannel.route.js";
 
 /* Conectar a MongoDB */
 connectMongoDB();
@@ -19,7 +21,9 @@ app.use(express.json()); // Para que Express entienda JSON en el body
 /* Conectar el router */
 app.use("/api/auth", auth_router);
 app.use("/api/workspace", authMiddleware, workspace_router);
+app.use("/api/members", member_router);
 app.use("/api/workspace", authMiddleware, channel_router);
+app.use("/api/workspace", authMiddleware, channelMessage_router);
 
 /* Levantar el servidor en el puerto 8080 */
 app.listen(8080, () => {
