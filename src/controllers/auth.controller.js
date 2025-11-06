@@ -17,7 +17,10 @@ class AuthController {
       ) {
         throw new ServerError(400, "Debes enviar un email valido");
       } else if (!password || password.length < 8) {
-        throw new ServerError(400, "Debes enviar una contraseña valida");
+        throw new ServerError(
+          400,
+          "Debes enviar una contraseña valida, mayor a 8 caracteres"
+        );
       }
 
       await AuthService.register(name, email, password);

@@ -22,6 +22,18 @@ class ChannelRepository {
     return await Channels.findById(channel_id);
   }
 
+  static async getByIdAndWorkspaceId(workspace_id, channel_id) {
+    try {
+      const channel = await Channels.findOne({
+        _id: channel_id,
+        workspace: workspace_id,
+      });
+      return channel;
+    } catch (error) {
+      throw new Error("Error al obtener el canal por ID y workspace");
+    }
+  }
+
   /* Eliminar un canal */
 }
 
