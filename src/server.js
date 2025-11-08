@@ -17,10 +17,7 @@ const app = express();
 /* Middlewares */
 app.use(
   cors({
-    origin: [
-      "http://localhost:5173",
-      "https://slack-clone-frontend.vercel.app",
-    ],
+    origin: [process.env.URL_FRONTEND, "http://localhost:5173"],
     credentials: true,
   })
 );
