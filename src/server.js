@@ -15,7 +15,15 @@ connectMongoDB();
 const app = express();
 
 /* Middlewares */
-app.use(cors()); // Permitir requests desde el frontend
+app.use(
+  cors({
+    origin: [
+      "http://localhost:5173",
+      "https://slack-clone-frontend.vercel.app",
+    ],
+    credentials: true,
+  })
+);
 app.use(express.json()); // Para que Express entienda JSON en el body
 
 /* Conectar el router */
