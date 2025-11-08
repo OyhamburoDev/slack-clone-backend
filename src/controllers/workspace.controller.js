@@ -19,9 +19,14 @@ class WorkspaceController {
       console.log("user_id:", user_id);
       console.log("workspace_id:", workspace_id);
 
+      const workspace = await WorkspaceRepository.getById(workspace_id);
+
       response.json({
         ok: true,
         message: "Workspace creado exitosamente!",
+        data: {
+          workspace: workspace,
+        },
       });
     } catch (error) {
       response.json({
