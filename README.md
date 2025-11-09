@@ -314,7 +314,7 @@ npm test
 
 ## 👨‍💻 Autor
 
-Proyecto desarrollado como trabajo final para UTN - Diplomatura en Programación Web Full Stack.
+Proyecto final desarrollado para la certificación de Backend Developer en UTN (Universidad Tecnológica Nacional).
 
 ---
 
