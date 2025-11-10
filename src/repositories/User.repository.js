@@ -9,11 +9,6 @@ class UserRepository {
       password: password,
     });
 
-    console.log("=== RESULT ===");
-    console.log(result);
-    console.log("=== INSERTED ID ===");
-    console.log(result.insertedId);
-
     return result;
   }
 
