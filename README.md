@@ -293,6 +293,37 @@ Asegúrate de configurar todas las variables de entorno en el dashboard de Verce
 
 ---
 
+## 📮 Documentación API (Postman)
+
+La colección de Postman con todos los endpoints documentados se encuentra en: `/docs/postman-collection.json`
+
+### Cómo importarla en Postman:
+
+1. Abrir Postman Desktop o Web
+2. Click en **"Import"** (esquina superior izquierda)
+3. Seleccionar **"Upload Files"**
+4. Navegar a `/docs/postman-collection.json` y seleccionarlo
+5. Click en **"Import"**
+
+### Configuración de Variables de Entorno (opcional):
+
+Una vez importada la colección, puedes configurar las siguientes variables en Postman para facilitar las pruebas:
+
+- `URL_API_SLACK`: `http://localhost:8080` (desarrollo) o tu URL de producción
+- `token`: Se auto-completa después del login
+
+### Contenido de la colección:
+
+La colección incluye ejemplos de todos los endpoints documentados en este README:
+
+- Autenticación (registro, login, verificación)
+- Gestión de workspaces
+- Gestión de canales
+- Mensajes
+- Invitaciones de miembros
+
+---
+
 ## 🧪 Testing
 
 Para ejecutar tests (cuando estén implementados):
