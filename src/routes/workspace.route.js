@@ -1,6 +1,7 @@
 import express from "express";
 import WorkspaceController from "../controllers/workspace.controller.js";
 import workspaceMiddleware from "../middlewares/workspace.middleware.js";
+import ROLES from "../constants/roles.js";
 
 /* Crear el router */
 const workspace_router = express.Router();
@@ -14,18 +15,18 @@ workspace_router.get(
 );
 workspace_router.post(
   "/:workspace_id/invite",
-  workspaceMiddleware(["admin"]),
+  workspaceMiddleware([ROLES.ADMIN]),
   WorkspaceController.inviteMember
 );
 workspace_router.post("/", WorkspaceController.create);
 workspace_router.put(
   "/:workspace_id",
-  workspaceMiddleware(["admin"]),
+  workspaceMiddleware([ROLES.ADMIN]),
   WorkspaceController.updateById
 );
 workspace_router.delete(
   "/:workspace_id",
-  workspaceMiddleware(["admin"]),
+  workspaceMiddleware([ROLES.ADMIN]),
   WorkspaceController.deleteById
 );
 

@@ -1,3 +1,4 @@
+import ROLES from "../constants/roles.js";
 import MemberWorkspaces from "../models/MemberWorkspace.model.js";
 import { ServerError } from "../utils/customError.utils.js";
 
@@ -32,7 +33,7 @@ class MemberWorkspaceRepository {
   }
 
   /* Crear relacion usuario workspace */
-  static async create(user_id, workspace_id, role = "member") {
+  static async create(user_id, workspace_id, role = ROLES.MEMBER) {
     const member =
       await MemberWorkspaceRepository.getMemberWorkspaceByUserIdAndWorkspaceId(
         user_id,

@@ -1,6 +1,7 @@
 import jwt from "jsonwebtoken";
 import ENVIRONMENT from "../config/environment.config.js";
 import MemberWorkspaceRepository from "../repositories/MemberWorkspace.repository.js";
+import ROLES from "../constants/roles.js";
 
 class MemberController {
   static async confirmInvitation(request, response) {
@@ -15,7 +16,7 @@ class MemberController {
       await MemberWorkspaceRepository.create(
         id_invited,
         id_workspace,
-        "member"
+        ROLES.MEMBER
       );
 
       response.redirect(`${ENVIRONMENT.URL_FRONTEND}`);

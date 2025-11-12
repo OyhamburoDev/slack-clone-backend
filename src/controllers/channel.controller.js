@@ -1,6 +1,7 @@
 import { request } from "express";
 import ChannelRepository from "../repositories/Channel.repository.js";
 import MemberWorkspaceRepository from "../repositories/MemberWorkspace.repository.js";
+import ROLES from "../constants/roles.js";
 
 class ChannelController {
   static async create(request, response) {
@@ -51,7 +52,7 @@ class ChannelController {
           user_id,
           workspace_id
         );
-      if (!member || member.role != "admin") {
+      if (!member || member.role != ROLES.ADMIN) {
         return response.status(403).json({
           ok: false,
           message: "Solo los administradores pueden eliminar canales",

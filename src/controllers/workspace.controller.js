@@ -5,6 +5,7 @@ import ENVIRONMENT from "../config/environment.config.js";
 import UserRepository from "../repositories/User.repository.js";
 import transporter from "../config/nodemailer.config.js";
 import jwt from "jsonwebtoken";
+import ROLES from "../constants/roles.js";
 
 class WorkspaceController {
   /* Crear un espacio de trabajo; */
@@ -14,7 +15,11 @@ class WorkspaceController {
       const user_id = request.user.id;
 
       const workspace_id = await WorkspaceRepository.create(name, url_image);
-      await MemberWorkspaceRepository.create(user_id, workspace_id, "admin");
+      await MemberWorkspaceRepository.create(
+        user_id,
+        workspace_id,
+        ROLES.ADMIN
+      );
       console.log("=== MIEMBRO CREADO ===");
       console.log("user_id:", user_id);
       console.log("workspace_id:", workspace_id);
