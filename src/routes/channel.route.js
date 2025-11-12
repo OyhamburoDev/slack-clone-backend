@@ -18,4 +18,10 @@ channel_router.get(
   ChannelController.getAllByWorkspace
 );
 
+channel_router.delete(
+  "/:workspace_id/channels/:channel_id",
+  workspaceMiddleware(),
+  ChannelController.deleteChannel
+);
+
 export default channel_router;

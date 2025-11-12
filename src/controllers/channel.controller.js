@@ -1,4 +1,6 @@
+import { request } from "express";
 import ChannelRepository from "../repositories/Channel.repository.js";
+import MemberWorkspaceRepository from "../repositories/MemberWorkspace.repository.js";
 
 class ChannelController {
   static async create(request, response) {
@@ -33,6 +35,37 @@ class ChannelController {
       });
     } catch (error) {
       response.json({
+        ok: false,
+        message: error.message,
+      });
+    }
+  }
+
+  static async deleteChannel(request, response) {
+    try {
+      const { workspace_id, channel_id } = request.params;
+      const user_id = request.user.id;
+
+      const member =
+        await MemberWorkspaceRepository.getMemberWorkspaceByUserIdAndWorkspaceId(
+          user_id,
+          workspace_id
+        );
+      if (!member || member.role != "admin") {
+        return response.status(403).json({
+          ok: false,
+          message: "Solo los administradores pueden eliminar canales",
+        });
+      }
+
+      await ChannelRepository.deleteById(channel_id);
+
+      response.json({
+        ok: true,
+        message: "Canal eliminado exitosamente",
+      });
+    } catch (error) {
+      response.status(500).json({
         ok: false,
         message: error.message,
       });

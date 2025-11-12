@@ -35,6 +35,10 @@ class ChannelRepository {
   }
 
   /* Eliminar un canal */
+  static async deleteById(channel_id) {
+    await Channels.findByIdAndDelete(channel_id);
+    return true;
+  }
 }
 
 export default ChannelRepository;
