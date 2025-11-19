@@ -1,5 +1,8 @@
 import express from "express";
 import cors from "cors";
+import { createServer } from "http";
+import { Server } from "socket.io";
+import { setupMessageSocket } from "./sockets/message.socket.js";
 import connectMongoDB from "./config/mongoDB.config.js";
 import auth_router from "./routes/auth.route.js";
 import workspace_router from "./routes/workspace.route.js";
@@ -30,8 +33,19 @@ app.use("/api/members", member_router);
 app.use("/api/workspace", authMiddleware, channel_router);
 app.use("/api/workspace", authMiddleware, channelMessage_router);
 
+/* ============ WEBSOCKET ============ */
+const httpServer = createServer(app); // ← Envolver Express
+const io = new Server(httpServer, {
+  cors: {
+    origin: [process.env.URL_FRONTEND, "http://localhost:5173"],
+    credentials: true,
+  },
+});
+
+setupMessageSocket(io);
+
 const PORT = process.env.PORT || 8080;
 
-app.listen(PORT, () => {
+httpServer.listen(PORT, () => {
   console.log(`Servidor corriendo en el puerto ${PORT}`);
 });
