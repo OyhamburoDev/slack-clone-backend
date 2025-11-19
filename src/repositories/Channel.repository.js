@@ -39,6 +39,17 @@ class ChannelRepository {
     await Channels.findByIdAndDelete(channel_id);
     return true;
   }
+
+  static async updateById(channel_id, updateData) {
+    const channel_update = await Channels.findByIdAndUpdate(
+      channel_id,
+      updateData,
+      {
+        new: true,
+      }
+    );
+    return channel_update;
+  }
 }
 
 export default ChannelRepository;

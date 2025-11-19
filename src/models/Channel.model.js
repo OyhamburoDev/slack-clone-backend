@@ -26,6 +26,10 @@ const channelSchema = new mongoose.Schema({
     type: Date,
     default: null,
   },
+  lastMessageAt: {
+    type: Date,
+    default: null,
+  },
 });
 
 const Channels = mongoose.model("Channel", channelSchema);

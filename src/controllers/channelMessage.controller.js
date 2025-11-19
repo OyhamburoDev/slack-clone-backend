@@ -41,6 +41,35 @@ class ChannelMessageController {
       });
     }
   }
+
+  static async searchMessages(request, response) {
+    try {
+      const { workspace_id } = request.params;
+      const { query } = request.query;
+
+      if (!query || query.trim().length === 0) {
+        return response.json({
+          ok: true,
+          data: { messages: [] },
+        });
+      }
+
+      const messages = await ChannelMessageRepository.searchByWorkspace(
+        workspace_id,
+        query
+      );
+
+      response.json({
+        ok: true,
+        data: { messages },
+      });
+    } catch (error) {
+      response.json({
+        ok: false,
+        message: error.message,
+      });
+    }
+  }
 }
 
 export default ChannelMessageController;

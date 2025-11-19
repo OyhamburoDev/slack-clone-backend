@@ -9,6 +9,12 @@ const channelMessage_router = express.Router();
 
 /* Definir las rutas */
 
+channelMessage_router.get(
+  "/:workspace_id/search",
+  workspaceMiddleware(),
+  ChannelMessageController.searchMessages
+);
+
 channelMessage_router.post(
   "/:workspace_id/channels/:channel_id/message",
   workspaceMiddleware(),

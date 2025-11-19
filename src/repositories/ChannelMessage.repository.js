@@ -1,4 +1,5 @@
 import ChannelMessages from "../models/ChannelMessage.model.js";
+import ChannelRepository from "./Channel.repository.js";
 
 class ChannelMessageRepository {
   /* Crear un mensaje */
@@ -9,6 +10,11 @@ class ChannelMessageRepository {
       content: content,
     });
     await new_message.save();
+
+    await ChannelRepository.updateById(channel_id, {
+      lastMessageAt: new_message.created_at,
+    });
+
     return new_message;
   }
 
@@ -23,6 +29,35 @@ class ChannelMessageRepository {
       })
       .sort({ created_at: 1 });
     return messages;
+  }
+
+  // Escapar caracteres especiales de regex
+  static escapeRegex(text) {
+    return text.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  }
+
+  /* Buscar en mi workspace */
+  static async searchByWorkspace(workspace_id, query) {
+    const safeQuery = this.escapeRegex(query);
+    const messages = await ChannelMessages.find({
+      content: { $regex: safeQuery, $options: "i" },
+    })
+      .populate({
+        path: "channel",
+        match: { workspace: workspace_id },
+        select: "name",
+      })
+      .populate({
+        path: "member",
+        populate: {
+          path: "user",
+          select: "name",
+        },
+      })
+      .sort({ created_at: -1 })
+      .limit(20);
+
+    return messages.filter((msg) => msg.channel !== null);
   }
 }
 
