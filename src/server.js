@@ -30,7 +30,8 @@ app.use("/api/members", member_router);
 app.use("/api/workspace", authMiddleware, channel_router);
 app.use("/api/workspace", authMiddleware, channelMessage_router);
 
-/* Levantar el servidor en el puerto 8080 */
-app.listen(8080, () => {
-  console.log("Servidor corriendo en http://localhost:8080");
+const PORT = process.env.PORT || 8080;
+
+app.listen(PORT, () => {
+  console.log(`Servidor corriendo en el puerto ${PORT}`);
 });
