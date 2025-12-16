@@ -3,7 +3,8 @@ import UserRepository from "../repositories/User.repository.js";
 import { ServerError } from "../utils/customError.utils.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import transporter from "../config/nodemailer.config.js";
+// import transporter from "../config/nodemailer.config.js";
+import resend from "../config/resend.config.js";
 
 class AuthService {
   static async register(name, email, password) {
@@ -39,15 +40,15 @@ class AuthService {
       user: ENVIRONMENT.GMAIL_USERNAME,
     });
 
-    await transporter.sendMail({
-      from: ENVIRONMENT.GMAIL_USERNAME,
+    await resend.emails.send({
+      from: "Slack Clone <onboarding@resend.dev>",
       to: email,
       subject: "Verificación de correo electrónico",
       html: `
     <h1>Verificá tu email</h1>
-    <p>Hacé click en el siguiente enlace para veridicar tu cuenta:</p>
+    <p>Hacé click en el siguiente enlace para verificar tu cuenta:</p>
     <a href='${ENVIRONMENT.URL_API_BACKEND}/api/auth/verify-email/${verification_token}'>Verificar email</a>
-    `,
+  `,
     });
 
     console.log("✅ Email enviado exitosamente");
