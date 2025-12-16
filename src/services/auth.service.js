@@ -32,6 +32,13 @@ class AuthService {
       ENVIRONMENT.JWT_SECRET
     );
 
+    console.log("🔍 Intentando enviar email a:", email);
+    console.log("🔍 Configuración SMTP:", {
+      host: "smtp.gmail.com",
+      port: 587,
+      user: ENVIRONMENT.GMAIL_USERNAME,
+    });
+
     await transporter.sendMail({
       from: ENVIRONMENT.GMAIL_USERNAME,
       to: email,
@@ -42,6 +49,8 @@ class AuthService {
     <a href='${ENVIRONMENT.URL_API_BACKEND}/api/auth/verify-email/${verification_token}'>Verificar email</a>
     `,
     });
+
+    console.log("✅ Email enviado exitosamente");
 
     return true;
   }
