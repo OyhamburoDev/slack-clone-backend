@@ -4,6 +4,7 @@ import { ServerError } from "../utils/customError.utils.js";
 import ENVIRONMENT from "../config/environment.config.js";
 import UserRepository from "../repositories/User.repository.js";
 import transporter from "../config/nodemailer.config.js";
+import resend from "../config/resend.config.js";
 import jwt from "jsonwebtoken";
 import ROLES from "../constants/roles.js";
 
@@ -194,8 +195,8 @@ class WorkspaceController {
         { expiresIn: "7d" }
       );
 
-      await transporter.sendMail({
-        from: ENVIRONMENT.GMAIL_USERNAME,
+      await resend.emails.send({
+        from: "Slack Clone <onboarding@resend.dev>",
         to: invited_email,
         subject: "Invitación al workspace",
         html: `
