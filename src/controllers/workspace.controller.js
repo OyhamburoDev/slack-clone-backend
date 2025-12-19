@@ -196,7 +196,7 @@ class WorkspaceController {
       );
 
       await resend.emails.send({
-        from: "Slack Clone <onboarding@resend.dev>",
+        from: "Slack Clone <noreply@oyhamburo.com>",
         to: invited_email,
         subject: "Invitación al workspace",
         html: `

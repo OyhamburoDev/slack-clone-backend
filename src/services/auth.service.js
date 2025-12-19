@@ -41,7 +41,7 @@ class AuthService {
     });
 
     await resend.emails.send({
-      from: "Slack Clone <onboarding@resend.dev>",
+      from: "Slack Clone <noreply@oyhamburo.com>",
       to: email,
       subject: "Verificación de correo electrónico",
       html: `
